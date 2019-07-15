@@ -1,0 +1,160 @@
+# download kaggle competition dataset
+kaggle competitions download -c inaturalist-2019-fgvc6 -p inaturalist
+
+kaggle competitions download -c aerial-cactus-identification -p kaggle/cactus
+
+# copy files to ec2 instance
+scp -i path/to/key file/to/copy user@ec2-xx-xx-xxx-xxx.compute-1.amazonaws.com:path/to/file
+
+scp -v -i ~/.ssh/id_rsa /Users/ludovica/.kaggle/kaggle.json ubuntu@54.186.115.237:~/.kaggle/kaggle.json
+
+# generate key and convert file to pem
+ssh-keygen -f ~/.ssh/id_rsa.pub -m 'PEM' -e > id_rsa.pem
+chmod 600 id_rsa.pem
+
+
+$ aws ec2 create-key-pair --key-name ludo_macbook --query 'KeyMaterial' --output text > ludo_macbook.pem
+
+# connect to ec2 instance fastai
+ssh -i ~/.ssh/id_rsa -L localhost:8888:localhost:8888 ubuntu@34.220.59.161
+
+# download from s3 to ec2
+aws s3 cp --recursive s3://self-learning-anomalies/processed_data/validation/ ./datasets/processed_data/valid/
+
+aws s3 cp --recursive s3://insight-anomalies-supervised/data/ ./data
+
+
+# connect to ec2 instance 
+1 ssh -i ~/.ssh/id_rsa.pem ubuntu@ec2-54-191-15-216.us-west-2.compute.amazonaws.com
+2 ssh -i ~/.ssh/id_rsa.pem ubuntu@ec2-34-220-125-12.us-west-2.compute.amazonaws.com
+
+
+ssh -i ~/.ssh/id_rsa.pem -L 8000:localhost:8889 ubuntu@ec2-34-219-126-157.us-west-2.compute.amazonaws.com
+
+3 ssh -i ~/.ssh/id_rsa.pem -L 8000:localhost:8889 ubuntu@ec2-35-164-101-18.us-west-2.compute.amazonaws.com
+
+
+
+# prepare dataset
+python3 extract_frames.py -input ./datasets/source_data/source_data/train/ --dest-folder ./datasets/processed_data/train/
+
+Testud: python3 extract_frames.py -video ./data/fire1.mp4 -name dataset -p2pdir . -width 640 -height 480
+
+# train
+python train_video.py --name multi_frame_dataset_640_test --dataroot /home/ubuntu/pix2pixHD/datasets/my_processed_data_640_crop/test/ --save_epoch_freq 1 --ngf 32  --gpu True --lambda_feat 20
+
+# train fine tuning 
+python train_video.py --name multi_frame_dataset_640_lambda_30 --dataroot /home/ubuntu/pix2pixHD/datasets/fine_tuned/ --save_epoch_freq 1 --ngf 32  --gpu True --load_pretrain /home/ubuntu/pix2pixHD/checkpoints/fine_tuned_epoch3 --lambda_feat 40 --lr 0.00005
+
+train_video.py --name multi_frame_dataset_640 --dataroot /home/ubuntu/pix2pixHD/datasets/my_processed_data_640_crop/train/ --save_epoch_freq 1 --ngf 32  --gpu True --load_pretrain /home/ubuntu/pix2pixHD/checkpoints/multi_frame_dataset_640
+
+
+# train fine tuned
+python train_video.py --name fine_tuned_2019-06-11_15-00-06 --dataroot /home/ubuntu/pix2pixHD/datasets/my_processed_data_640_crop/fine_tuned/ --save_epoch_freq 1 --ngf 32  --gpu True
+
+# TRAIN ON SECOND MACHINE
+python train_video.py --name 640_crop_two_frames --dataroot /home/ubuntu/self-supervised/data/my_processed_data_640_crop/train --save_epoch_freq 1 --ngf 32  --gpu True
+
+
+python train_video.py --name multi_frame_dataset_640_test --dataroot /home/ubuntu/pix2pixHD/datasets/my_processed_data_640_crop/test/ --save_epoch_freq 1 --ngf 32  --gpu True --lambda_feat 30 --load_pretrain /home/ubuntu/pix2pixHD/checkpoints/multi_frame_dataset_640_test
+
+
+# generate
+python3 generate_video.py --name multi_frame_dataset_640_lambda_30 --dataroot /home/ubuntu/pix2pixHD/datasets/fine_tuned_whole --start_from datasets/gen_frames/fine_tuned_whole --fps 30 --ngf 32
+
+
+python3 generate_video.py --name multi_frame_dataset_640_test_epoch_5 --dataroot /home/ubuntu/pix2pixHD/datasets/generate_test_video --start_from datasets/gen_frames/generate_test_video --fps 30 --ngf 32
+
+
+scp -ri ~/.ssh/id_rsa /Users/ludovica/Documents/Insight/SupervisedVideoClassification/data ubuntu@ec2-34-221-204-82.us-west-2.compute.amazonaws.com:/home/ubuntu/SupervisedVideoClassification/
+
+
+# from local to EC2
+scp -ri ~/.ssh/id_rsa /Users/ludovica/Documents/Insight/data/my_processed_data_640_crop/generate_test_video ubuntu@ec2-54-191-15-216.us-west-2.compute.amazonaws.com:/home/ubuntu/pix2pixHD/datasets/
+
+
+
+FRAMEDATA
+scp -ri ~/.ssh/id_rsa /Users/ludovica/Documents/Insight/data/frame_data ubuntu@ec2-54-190-62-36.us-west-2.compute.amazonaws.com:/home/ubuntu/SupervisedVideoClassification/
+
+
+2 scp -i ~/.ssh/id_rsa /Users/ludovica/Documents/Insight/data/my_processed_data_640_crop/fine_tuned ubuntu@ec2-34-220-125-12.us-west-2.compute.amazonaws.com:/home/ubuntu/self-supervised/data
+
+3 scp -ri ~/.ssh/id_rsa /Users/ludovica/Documents/Insight/SupervisedVideoClassification/data ubuntu@ec2-54-244-71-3.us-west-2.compute.amazonaws.com:/home/ubuntu/SupervisedVideoClassification/data
+
+
+# from EC2 to local
+scp -ri ~/.ssh/id_rsa ubuntu@ec2-54-191-15-216.us-west-2.compute.amazonaws.com:/home/ubuntu/pix2pixHD/checkpoints/multi_frame_dataset_640_lambda_30/frames /Users/ludovica/Documents/Insight/generated_frames/
+
+scp -i ~/.ssh/id_rsa ubuntu@ec2-54-191-15-216.us-west-2.compute.amazonaws.com:/home/ubuntu/pix2pixHD/anomaly_2019-06-11_15-00-06_epoch11.csv /Users/ludovica/Documents/Insight/
+
+# download from s3 to local
+aws s3 cp --recursive s3://self-learning-anomalies/processed_data/train/ ./processed_data/train/ 
+
+
+# download from s3 link
+
+
+Next to do
+- generate next image
+	- start instance - Done
+	- add rule for current ip - Done
+	- ssh to instance
+	- delete virtualenv
+	- edit code locally to generate only one image - Done
+	- push to repo - Done
+	- pull from repo
+	- run code to generate image
+	- start jupyter
+	- show image
+
+- ask russell to motivate why self-supervised - Done
+
+- setup pipeline to access videos and save them to s3
+- setup pipeline to 
+	- access video to s3
+	- read from metadata the timestamp the anomaly arrives
+	- keep one or two videos as test test set for the whole pipeline
+	- split the video to train the generator
+		- from 0 to anomaly- 1s as training set
+		- from anomaly- 1s to end as test set
+	- run extract_frames in the whole train folder
+	- run extract_frames in the whole test folder
+	- train loop so that 
+		- loads one video folder after the other
+		- for each video folder loads frame at t and net frame t+1
+	- generate frame starting from previous frame
+	- calculate similarity for training set
+	- find cutoff
+	- calculate similarity & use cutoff found on training set 
+
+- check code of guy that did fireworks
+- ask Araks how she calculates image similarity
+
+Fri
+- check training set
+- continue training starting from pretrained model
+- design evaluation script and inference
+- generate more training data to fine tune
+
+
+python3 extract_frames.py -input /Users/ludovica/Documents/Insight/data/source_data/train/anomaly_2019-06-14_14-03-42.mp4 --dest-folder /Users/ludovica/Documents/Insight/data/processed_data/train
+
+python train_video.py --name multi_frame_dataset_640_normal_only --dataroot /Users/ludovica/Documents/Insight/data/processed_data/train --save_epoch_freq 1 --ngf 32  
+
+# generate mean_var in pix2pix
+python3 compute_meanvariance.py --root-dir /home/ubuntu/pix2pixHD/datasets/my_processed_data_640_crop/fine_tuned_test/ --name multi_frame_dataset_640_lambda_30 --gpu True --ngf 32  
+
+python3 compute_test_score.py --root-dir /home/ubuntu/pix2pixHD/datasets/my_processed_data_640_crop/validation --name multi_frame_dataset_640 --gpu True --ngf 32
+
+
+python3 compute_meanvariance.py --root-dir /home/ubuntu/pix2pixHD/datasets/my_processed_data_640_crop/test/ --name multi_frame_dataset_640_test_epoch_5 --gpu True --ngf 32  
+
+
+
+ffmpeg -loop 1 -framerate 30 -t 3600 -i /path/to/my.png -s 1280x720 -vf drawtext="fontfile=/path/to/my.ttf:fontcolor=white: timecode='00\:00\:00;00': r='30000/1001': text='': fontsize=148: x=190: y=260:" -c:v libx264 -vb 1000k -pix_fmt yuv420p -preset fast -f mp4 -r 30 -y out.mp4
+
+ffmpeg -i /Users/ludovica/Documents/Insight/self-supervised/source_data/anomaly_2019-06-17_12-27-13.mp4 -framerate 30 -s 640x480 -vf drawtext="fontfile=/Users/ludovica/Documents/Insight/arial.ttf:fontcolor=white: timecode='00\:00\:00;00: r='30': text='': fontsize=30: x=400: y=300:'" -codec:a copy -f mp4 -r 30 -y ./processed_data/copy_anomaly_2019-06-17_12-27-13.mp4
+
+
+mv ./datasets/processed_data/train/frames/ ./datasets/processed_data/train/train_frames/
