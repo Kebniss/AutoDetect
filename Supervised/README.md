@@ -1,5 +1,5 @@
-# SupervisedVideoClassification
-This project uses PyTorch to classify short videos in a supervised fashion.
+# Supervised
+This part of the project uses PyTorch to classify short videos in a supervised fashion.
 
 The core of this approach is the following: we load a sliding window of N images,
 and we have models that take those N images and produce a prediction on the
