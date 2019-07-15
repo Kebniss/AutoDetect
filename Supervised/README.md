@@ -1,4 +1,4 @@
-# Supervised
+# Supervised part
 This part of the project uses PyTorch to classify short videos in a supervised fashion.
 
 The core of this approach is the following: we load a sliding window of N images,
