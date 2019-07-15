@@ -20,8 +20,8 @@ This is supposed to be done only once! The code to do that is in `utils/videos_t
 
 After that, we simply consume data as a PyTorch Dataset. We have two types:
 
-a. `FrameFolder`. Every `__getitem__` returns a single frame with its label.
-b. `FrameWindow`. Every `__getitem__` returns a window as a 4D tensor.
+1. `FrameFolder`. Every `__getitem__` returns a single frame with its label.
+2. `FrameWindow`. Every `__getitem__` returns a window as a 4D tensor.
 
 Since we have many videos, we want to read all of them into a single large Dataset.
 To do that, all we have to do is read and concatenate and we do that in the `FolderOfFrameFolders`.
