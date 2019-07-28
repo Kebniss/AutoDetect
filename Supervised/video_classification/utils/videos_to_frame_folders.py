@@ -75,14 +75,11 @@ class ScaleWidth(object):
         return img.resize((w, h), self.method)
 
 
-# In[13]:
-
 ROOT = Path("/Users/ludovica/Documents/Insight/data/source_data/")
 
 TRAIN_ROOT = ROOT / "train"
 VALID_ROOT = ROOT / "validation/"
 
-# In[14]:
 
 with open(ROOT / "labels.json", 'r') as fin:
     labels = json.load(fin)
