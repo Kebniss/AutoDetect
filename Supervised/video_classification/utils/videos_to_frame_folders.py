@@ -93,12 +93,6 @@ with open(ROOT / "labels.json", 'r') as fin:
         for f in labels
     }
 
-# In[15]:
-
-labels
-
-# In[21]:
-
 
 class VideoProcessPipeline:
     def __init__(self,
@@ -189,9 +183,6 @@ class VideoProcessPipeline:
         return IPythonImage(filename="/tmp/out.gif")
 
 
-# # Now let's use it to process all videos
-
-# In[22]:
 
 SOURCE_ROOT = Path("/Users/ludovica/Documents/Insight/data/source_data/")
 
@@ -202,12 +193,10 @@ TARGET_ROOT = Path("/Users/ludovica/Documents/Insight/data/frame_data/")
 TARGET_TRAIN_ROOT = TARGET_ROOT / "train"
 TARGET_VALID_ROOT = TARGET_ROOT / "validation"
 
-# In[23]:
 
 train_video_paths = [p for p in SOURCE_TRAIN_ROOT.glob("**/*.mp4")]
 validation_video_paths = [p for p in SOURCE_VALID_ROOT.glob("**/*.mp4")]
 
-# In[24]:
 
 for video_path in tqdm(train_video_paths):
     if os.path.isdir(TARGET_TRAIN_ROOT / video_path.stem):
@@ -216,7 +205,6 @@ for video_path in tqdm(train_video_paths):
         video_path, videos_labels=labels, new_fps=10, scale_to_width=640)
     vv.save_to_folder(TARGET_TRAIN_ROOT)
 
-# In[146]:
 
 for video_path in tqdm(validation_video_paths):
     if os.path.isdir(TARGET_VALID_ROOT / video_path.stem):
