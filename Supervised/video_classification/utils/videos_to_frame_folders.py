@@ -75,18 +75,6 @@ class ScaleWidth(object):
         return img.resize((w, h), self.method)
 
 
-ROOT = Path("/Users/ludovica/Documents/Insight/data/source_data/")
-
-with open(ROOT / "labels.json", 'r') as fin:
-    labels = json.load(fin)
-    labels = {
-        Path(f['filename']).stem: [(t['start_frame_count'],
-                                    t['end_frame_count'])
-                                   for t in f['anomalies']]
-        for f in labels
-    }
-
-
 class VideoProcessPipeline:
     def __init__(self,
                  video_path,
@@ -185,6 +173,16 @@ SOURCE_VALID_ROOT = SOURCE_ROOT / "validation"
 TARGET_ROOT = Path("/Users/ludovica/Documents/Insight/data/frame_data/")
 TARGET_TRAIN_ROOT = TARGET_ROOT / "train"
 TARGET_VALID_ROOT = TARGET_ROOT / "validation"
+
+
+with open(SOURCE_ROOT / "labels.json", 'r') as fin:
+    labels = json.load(fin)
+    labels = {
+        Path(f['filename']).stem: [(t['start_frame_count'],
+                                    t['end_frame_count'])
+                                   for t in f['anomalies']]
+        for f in labels
+    }
 
 
 train_video_paths = [p for p in SOURCE_TRAIN_ROOT.glob("**/*.mp4")]
