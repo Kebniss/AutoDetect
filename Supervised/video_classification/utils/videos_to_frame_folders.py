@@ -77,10 +77,6 @@ class ScaleWidth(object):
 
 ROOT = Path("/Users/ludovica/Documents/Insight/data/source_data/")
 
-TRAIN_ROOT = ROOT / "train"
-VALID_ROOT = ROOT / "validation/"
-
-
 with open(ROOT / "labels.json", 'r') as fin:
     labels = json.load(fin)
     labels = {
